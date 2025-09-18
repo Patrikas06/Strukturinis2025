@@ -1,0 +1,17 @@
+#include <iostream>
+#include <string>
+using namespace std;
+int main()
+{
+  string Marke = "Volkswagen";
+  string Modelis = "Passat";
+  int Metai = 2010;
+  float Litrazas = 2.0;
+  string Spalva = "Sidabrines";
+  
+  
+  cout << " Automobilis " << Marke << " " << " , kurio modelis yra " <<Modelis<< " " << " , pagamintas " << Metai << " metais " << ", jo litrazas yra " <<Litrazas<< " litrai " << " ir jis yra "<<Spalva<< " spalvos. " <<endl;
+  
+  
+  return 0;
+}
