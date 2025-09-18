@@ -1,0 +1,20 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+using namespace std;
+int main()
+{
+    
+int n;
+int suma = 0;
+cout<<"Iveskite dvizenkli skaiciu"<<endl;
+cin>>n;
+if( n>=10 && n<=99)
+{
+    int des = n / 10;
+    int vie = n % 10;
+    int suma = des + vie;
+}
+cout <<" Skaitmenu suma: "<< suma <<endl;
+  return 0;
+}
