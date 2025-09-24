@@ -1,0 +1,22 @@
+#include <iostream>
+using namespace std;
+int main()
+{
+    int p1 = -7;
+    int p2 = -8;
+    int p3 = -9;
+    double vidurkis;
+    
+    vidurkis = (p1+p2+p3)/3.0;
+    
+   
+    if (vidurkis<5)
+    {
+        cout<<"vidurkis neigiamas"<<endl;
+    } else{
+        cout<<"vidurkis teigiamas"<<endl;
+    }
+    cout<<"Pazymiu vidurkis yra: "<<vidurkis<<endl;
+
+    return 0;
+}
