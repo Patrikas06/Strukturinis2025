@@ -1,0 +1,23 @@
+#include <iostream>
+using namespace std;
+int main()
+{
+    int n ;
+    int metai;
+    int procentai;
+    double suma;
+    cout<<"Iveskite suma kuria norite ideti i banka: "<<endl;
+    cin>>n;
+    cout<<"Iveskite kiek metu : "<<endl;
+    cin>>metai;
+    cout<<"Iveskite procentus: "<<endl;
+    cin>>procentai;
+    suma = (n*metai)*procentai;
+    
+    
+    
+    
+    cout<<"Jusu suma"<<suma*0.01+n<<endl;
+
+    return 0;
+}
