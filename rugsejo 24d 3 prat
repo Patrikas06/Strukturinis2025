@@ -1,0 +1,24 @@
+#include <iostream>
+using namespace std;
+int main()
+{
+    int n;
+   cout<<"Iveskite pazymi (1-10)"<<endl;
+   cin>>n;
+    if (n==10)
+    {
+        cout<<"Puiku"<<endl;
+    } else if (n>=9){
+        cout<<"Laba gerai"<<endl;
+    } else if (n>=7) {
+        cout<<"Gerai"<<endl;
+    } else if (n>=5){
+        cout<<"Pateinkinamai"<<endl;
+    }else if (n<=4){
+        cout<<"Egzaminas neislaikytas"<<endl;
+    }
+    cout<<"Jusu ivertinimas yra: "<<n<<endl;
+    
+
+    return 0;
+}
