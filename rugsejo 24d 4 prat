@@ -1,0 +1,31 @@
+#include <iostream>
+using namespace std;
+int main()
+{
+    int n;
+    
+   cout<<"Iveskite pazymi (1-10)"<<endl;
+   
+   cin>>n;
+   
+switch (n) {
+    case 10:
+    printf ("Puiku");
+    break;
+    case 9:
+    printf ("Labai gerai");
+    break;
+    case 8:
+    case 7:
+    printf ("Gerai");
+    break;
+    case 6:
+    case 5:
+    printf ("Patenkinamai");
+    break;
+    case 4:
+    printf ("Egzaminas neislaikytas");
+}
+
+    return 0;
+}
