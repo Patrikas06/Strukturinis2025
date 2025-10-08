@@ -23,9 +23,9 @@ int main() {
 
         cout << "Pasirinkite veiksma:"<<endl;
         cout << "C - Palyginti valiutos kursa"<<endl;
-        cout << "P - Pirkti valiuta (is euru)"<<endl;
-        cout << "B - Parduoti valiuta (i eurus)"<<endl;
-        cout << "Jusu pasirinkimas: "<<endl;
+        cout << "P - Pirkti valiuta "<<endl;
+        cout << "B - Parduoti valiuta "<<endl;
+        cout << " pasirinkimas: "<<endl;
         cin >> veiksmas;
 
         cout << "Valiuta (GBP, USD, INR): "<<endl;
