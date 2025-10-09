@@ -1,12 +1,13 @@
-#include <iostream>
+
+ #include <iostream>
 #include <string>
 #include <iomanip>
 using namespace std;
 
 int main() {
     string val;
-    double suma;
-    char veiksmas;
+    double s;
+    char v;
     int pasirinkimas = 1; 
 
     double GBP_Bendras   = 0.8729;
@@ -21,57 +22,50 @@ int main() {
 
     while (pasirinkimas == 1) {
 
-        cout << "Pasirinkite veiksma:"<<endl;
-        cout << "C - Palyginti valiutos kursa"<<endl;
-        cout << "P - Pirkti valiuta "<<endl;
-        cout << "B - Parduoti valiuta "<<endl;
-        cout << " pasirinkimas: "<<endl;
-        cin >> veiksmas;
+        cout<<"Pasirinkite veiksma:"<<endl;
+        cout<<"C-Palyginti valiutos kursa"<<endl;
+        cout<<"P-Pirkti valiuta (is euru)"<<endl;
+        cout<<"B-Parduoti valiuta (i eurus)"<<endl;
+        cout<<"Jusu pasirinkimas: "<<endl;;
+        cin>>v;
 
-        cout << "Valiuta (GBP, USD, INR): "<<endl;
+        cout<<"Valiuta (GBP, USD, INR): "<<endl;
         cin >> val;
 
-        if (veiksmas == 'C') {
-            if (val == "GBP") cout << "1 EUR = " << GBP_Bendras << " GBP" <<endl;
-            else if (val == "USD") cout << "1 EUR = " << USD_Bendras << " USD " << endl;
-            else if (val == "INR") cout << "1 EUR = " << INR_Bendras << " INR" << endl;
-            
+        if (v == 'C') {
+            if (val == "GBP") cout << "1 EUR = " << GBP_Bendras << " GBP"<<endl;
+            else if (val == "USD") cout << "1 EUR = " << USD_Bendras << " USD"<<endl;
+            else if (val == "INR") cout << "1 EUR = " << INR_Bendras << " INR"<<endl;
         }
-
-        else if (veiksmas == 'P') {
+        else if (v == 'P') {
             cout << "Iveskite kiek euru norite iskeisti: "<<endl;
-            cin >> suma;
+            cin >> s;
 
             if (val == "GBP")
-                cout << suma << " € gausite " << suma * GBP_Pirkti << " £"<< endl;
+                cout << s << "€ gausite " << s * GBP_Pirkti << " £"<<endl;
             else if (val == "USD")
-                cout << suma << " € gausite " << suma * USD_Pirkti << " $"<< endl;
+                cout << s << "€ gausite " << s * USD_Pirkti << " $"<<endl;
             else if (val == "INR")
-                cout << suma << " € gausite " << suma * INR_Pirkti << " ₹" << endl;
-           
+                cout << s << "€ gausite " << s * INR_Pirkti << " ₹" <<endl;
+        }
+        else if (v == 'B') {
+            cout << "Iveskite kiek valiutos norite parduoti: "<<endl;
+            cin >> s;
+
+            if (val == "GBP")
+                cout << "Pardavus " << s << " £, gausite " << s / GBP_Parduoti << " € " <<endl;
+            else if (val == "USD")
+                cout << "Pardavus " << s << " $, gausite " << s / USD_Parduoti << " € " <<endl;
+            else if (val == "INR")
+                cout << "Pardavus " << s << " ₹, gausite " << s / INR_Parduoti << " € " <<endl;
         }
 
-        else if (veiksmas == 'B') {
-            cout << "Iveskite kiek valiutos norite parduoti: " << endl;;
-            cin >> suma;
-
-            if (val == "GBP")
-                cout << "Pardavus " << suma << " £, gausite " << suma / GBP_Parduoti << " € " << endl;
-            else if (val == "USD")
-                cout << "Pardavus " << suma << " $, gausite " << suma / USD_Parduoti << " € " << endl;
-            else if (val == "INR")
-                cout << "Pardavus " << suma << " ₹, gausite " << suma / INR_Parduoti << " € " << endl;
-            
-
         
+        cout<<"Norite grizti i pradzia? (1 - Taip, 0 - Iseiti): "<<endl;
+        cin>>pasirinkimas;
+        cout<<setprecision(2)<<fixed<<endl;
+    }
 
-        cout << "Norite grizti i pradzia? (1 - Taip, 0 - Iseiti): "<<endl;
-        
-        cin >> pasirinkimas;
-    
-}
-    cout << "Programa baigta" << endl;
-    
+    cout<<"Programa baigta"<<endl;
     return 0;
-}
 }
