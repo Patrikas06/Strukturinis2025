@@ -1,0 +1,136 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int MAX_MOKINIU = 3, MAX_PAZYMIU = 3;
+
+int main() {
+    string vardai[MAX_MOKINIU];
+    int pazymiai[MAX_MOKINIU][MAX_PAZYMIU], kiekPaz[MAX_MOKINIU];
+    int kiek = 0, pasirinkimas;
+
+    do {
+        cout << "MOKINIU PAZYMIAI" << endl;
+        cout << "1 Prideti mokini" << endl;
+        cout << "2 Rodyti visus" << endl;
+        cout << "3 Rodyti viena" << endl;
+        cout << "4 Atnaujinti pazymi" << endl;
+        cout << "5 Pasalinti mokini" << endl;
+        cout << "0 Iseiti" << endl;
+        cout << "Pasirinkimas: "<<endl;
+        cin >> pasirinkimas;
+        cin.ignore();
+
+        if (pasirinkimas == 1) {
+            if (kiek >= MAX_MOKINIU) {
+                cout <<"pasiektas limitas" << endl;
+            } else {
+                cout <<"Vardas: ";
+                getline(cin, vardai[kiek]);
+                cout <<"kiek pazymiu (1-10): "<<endl;
+                cin >> kiekPaz[kiek];
+
+                if (kiekPaz[kiek] < 1 || kiekPaz[kiek] > 10) {
+                    cout <<"Blogas skaicius" << endl;
+                } else {
+                    for (int i = 0; i < kiekPaz[kiek]; i++) {
+                        cout << i + 1 << "-as pazymys: "<<endl;
+                        cin >> pazymiai[kiek][i];
+                    }
+                    kiek++;
+                    cout <<"Prideta" << endl;
+                }
+                cin.ignore();
+            }
+        }
+
+        else if (pasirinkimas == 2) {
+            if (!kiek) {
+                cout <<"Tuscia" << endl;
+            } else {
+                for (int i = 0; i < kiek; i++) {
+                    cout << vardai[i] << ": "<<endl;
+                    for (int j = 0; j < kiekPaz[i]; j++)
+                        cout << pazymiai[i][j] << " "<<endl;
+                    cout << endl;
+                }
+            }
+        }
+
+        else if (pasirinkimas == 3) {
+            cout <<"Iveskite varda: "<<endl;
+            string v;
+            getline(cin, v);
+            bool r = false;
+            for (int i = 0; i < kiek; i++) {
+                if (vardai[i] == v) {
+                    cout << vardai[i] << ": "<<endl;
+                    for (int j = 0; j < kiekPaz[i]; j++)
+                        cout << pazymiai[i][j] << " "<<endl;
+                    cout << endl;
+                    r = true;
+                    break;
+                }
+            }
+            if (!r) cout <<"nerasta"<< endl;
+        }
+
+        else if (pasirinkimas == 4) {
+            cout <<"vardas: "<<endl;
+            string v;
+            getline(cin, v);
+            bool r = false;
+            for (int i = 0; i < kiek; i++) {
+                if (vardai[i] == v) {
+                    int nr;
+                    cout <<"kuris pazymys (1-" << kiekPaz[i] << "): "<<endl;
+                    cin >> nr;
+                    if (nr < 1 || nr > kiekPaz[i]) {
+                        cout << "Blogas numeris"<< endl;
+                        break;
+                    }
+                    cout << "naujas pazymys: "<< endl;
+                    cin >> pazymiai[i][nr - 1];
+                    cout <<"atnaujinta" << endl;
+                    r = true;
+                    cin.ignore();
+                    break;
+                }
+            }
+            if (!r) cout <<"nerasta." << endl;
+        }
+
+        else if (pasirinkimas == 5) {
+            cout <<"vardas: "<<endl;
+            string v;
+            getline(cin, v);
+            bool r = false;
+            for (int i = 0; i < kiek; i++) {
+                if (vardai[i] == v) {
+                    for (int j = i; j < kiek - 1; j++) {
+                        vardai[j] = vardai[j + 1];
+                        kiekPaz[j] = kiekPaz[j + 1];
+                        for (int k = 0; k < MAX_PAZYMIU; k++)
+                            pazymiai[j][k] = pazymiai[j + 1][k];
+                    }
+                    kiek--;
+                    r = true;
+                    cout <<"Pasalinta"<< endl;
+                    break;
+                }
+            }
+            if (!r) cout <<"Nerasta"<< endl;
+        }
+
+        else if (pasirinkimas == 0) {
+            cout <<"Baigta"<< endl;
+        }
+
+        else {
+            cout <<"Blogas pasirinkimas"<< endl;
+        }
+
+    } while (pasirinkimas != 0);
+
+    return 0;
+}
