@@ -1,0 +1,129 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <string>
+using namespace std;
+
+const int MAX_MENIU = 50;
+const double MOKESCIAI = 0.21;
+
+struct Meniu {
+    string patiekaloPavadinimas;
+    double patiekaloKaina;
+};
+
+int nuskaitytiMeniu(Meniu meniuSarasas[]);
+void parodytiMeniu(Meniu meniuSarasas[], int kiek);
+void spausdintiSaskaita(Meniu meniuSarasas[], int kiek, int kiekiai[]);
+
+int main() {
+    Meniu meniuSarasas[MAX_MENIU];
+    int patiekaluKiekis = nuskaitytiMeniu(meniuSarasas);
+
+    if (patiekaluKiekis == 0) {
+        cout << "Nepavyko nuskaityti meniu duomenų!" << endl;
+        return 1;
+    }
+
+    parodytiMeniu(meniuSarasas, patiekaluKiekis);
+
+    int kiekiai[MAX_MENIU] = {0};
+    int pasirinkimas, porcijaKiekis;
+
+    cout << "\nĮveskite pasirinktų patiekalų numerius (0 – baigti):\n";
+    while (true) {
+        cout << "Pasirinkite patiekalo numerį: ";
+        cin >> pasirinkimas;
+
+        if (pasirinkimas == 0) break;
+        if (pasirinkimas < 1 || pasirinkimas > patiekaluKiekis) {
+            cout << "Neteisingas numeris. Bandykite dar kartą.\n";
+            continue;
+        }
+
+        cout << "Kiek porcijų norite? ";
+        cin >> porcijaKiekis;
+
+        if (porcijaKiekis > 0) {
+            kiekiai[pasirinkimas - 1] += porcijaKiekis;
+        }
+    }
+
+    spausdintiSaskaita(meniuSarasas, patiekaluKiekis, kiekiai);
+    return 0;
+}
+
+
+int nuskaitytiMeniu(Meniu meniuSarasas[]) {
+    ifstream failas("menu.txt");
+    if (!failas) {
+        cerr << "Klaida: nepavyko atidaryti failo menu.txt\n";
+        return 0;
+    }
+
+    int kiekis = 0;
+    while (kiekis < MAX_MENIU && getline(failas, meniuSarasas[kiekis].patiekaloPavadinimas, '\t')) {
+        failas >> meniuSarasas[kiekis].patiekaloKaina;
+        failas.ignore(1000, '\n');
+        kiekis++;
+    }
+
+    failas.close();
+    return kiekis;
+}
+
+
+void parodytiMeniu(Meniu meniuSarasas[], int kiek) {
+    cout << "Sveiki atvykę į restoraną „Pusryčių rojus“!\n"; 
+    cout << left << setw(4) << "Nr" << setw(35) << "Patiekalas" << "Kaina (EUR)\n";
+    for (int i = 0; i < kiek; i++) {
+        cout << left << setw(4) << (i + 1)
+             << setw(35) << meniuSarasas[i].patiekaloPavadinimas
+             << fixed << setprecision(2) << meniuSarasas[i].patiekaloKaina << "€" << endl;
+    }
+}
+
+
+void spausdintiSaskaita(Meniu meniuSarasas[], int kiek, int kiekiai[]) {
+    ofstream saskaita("receipt.txt");
+    if (!saskaita) {
+        cerr << "Klaida: nepavyko sukurti failo saskaita.txt\n";
+        return;
+    }
+
+    double sumaBeMokesciu = 0.0;
+
+    cout << "\nJūsų užsakymas:\n\n";
+    saskaita << "Sveiki atvykę į restoraną „Pusryčių rojus“\n\n";
+
+    for (int i = 0; i < kiek; i++) {
+        if (kiekiai[i] > 0) {
+            double patiekaloSuma = kiekiai[i] * meniuSarasas[i].patiekaloKaina;
+            sumaBeMokesciu += patiekaloSuma;
+
+            cout << setw(2) << kiekiai[i] << "  " << left << setw(35)
+                 << meniuSarasas[i].patiekaloPavadinimas
+                 << fixed << setprecision(2) << patiekaloSuma << "€" << endl;
+
+            saskaita << setw(2) << kiekiai[i] << "  " << left << setw(35)
+                     << meniuSarasas[i].patiekaloPavadinimas
+                     << fixed << setprecision(2) << patiekaloSuma << "€" << endl;
+        }
+    }
+
+    double mokesciai = sumaBeMokesciu * MOKESCIAI;
+    double galutineSuma = sumaBeMokesciu + mokesciai;
+
+    cout << "\nMokesčiai (21%)" << setw(33) << right
+         << fixed << setprecision(2) << mokesciai << "€" << endl;
+    cout << "Galutinė suma" << setw(35) << right
+         << fixed << setprecision(2) << galutineSuma << "€" << endl;
+
+    saskaita << "\nMokesčiai (21%)" << setw(33) << right
+             << fixed << setprecision(2) << mokesciai << "€" << endl;
+    saskaita << "Galutinė suma" << setw(35) << right
+             << fixed << setprecision(2) << galutineSuma << "€" << endl;
+
+    saskaita.close();
+    cout << "\nSąskaita išsaugota faile saskaita.txt\n";
+}
