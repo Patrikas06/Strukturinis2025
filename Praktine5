@@ -1,0 +1,226 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+
+struct Studentas {
+    string id;       
+    string atsakymai;
+    int taskai;     
+    double procentai; 
+    int pazymys;     
+};
+void skaiciuotiRezultatus(Studentas &studentas, const string &teisingiAtsakymai) {
+    studentas.taskai = 0;
+    for (size_t i = 0; i < teisingiAtsakymai.size(); i++) {
+        char ats = studentas.atsakymai[i];
+        char teisingas = teisingiAtsakymai[i];
+        if (ats == 'T' || ats == 'F') {
+            if (ats == teisingas)
+                studentas.taskai += 2;
+            else
+                studentas.taskai -= 1;
+        }
+    
+    }
+
+    studentas.procentai = (studentas.taskai / 40.0) * 100;
+
+    
+    if (studentas.procentai >= 95) studentas.pazymys = 10;
+    else if (studentas.procentai >= 85) studentas.pazymys = 9;
+    else if (studentas.procentai >= 75) studentas.pazymys = 8;
+    else if (studentas.procentai >= 65) studentas.pazymys = 7;
+    else if (studentas.procentai >= 55) studentas.pazymys = 6;
+    else if (studentas.procentai >= 50) studentas.pazymys = 5;
+    else if (studentas.procentai >= 35) studentas.pazymys = 4;
+    else if (studentas.procentai >= 25) studentas.pazymys = 3;
+    else if (studentas.procentai >= 15) studentas.pazymys = 2;
+    else studentas.pazymys = 1;
+}
+
+
+bool nuskaitytiDuomenis(const string &failas, string &teisingiAtsakymai, vector<Studentas> &studentai) {
+    ifstream inFile(failas);
+
+
+    getline(inFile, teisingiAtsakymai);
+
+    string eilute;
+    while (getline(inFile, eilute)) {
+        if (eilute.empty()) continue;
+        Studentas s;
+        s.id = eilute.substr(0, eilute.find(' '));
+        s.atsakymai = eilute.substr(eilute.find(' ') + 1);
+        while (s.atsakymai.size() < 20) s.atsakymai += ' ';
+        studentai.push_back(s);
+    }
+
+    inFile.close();
+    return true;
+}
+
+
+void spausdintiRezultatus(const vector<Studentas> &studentai) {
+    cout << left << setw(10) << "ID" 
+         << setw(8) << "Taskai" 
+         << setw(10) << "Procentai" 
+         << setw(6) << "Pazymys" << endl;
+    
+    for (const auto &s : studentai) {
+        cout << left << setw(10) << s.id
+             << setw(8) << s.taskai
+             << setw(10) << fixed << setprecision(2) << s.procentai
+             << setw(6) << s.pazymys << endl;
+    }
+}
+
+
+void issaugotiRezultatus(const string &failas, const vector<Studentas> &studentai) {
+    ofstream outFile(failas);
+  
+    outFile << left << setw(10) << "ID" 
+            << setw(8) << "Taskai" 
+            << setw(10) << "Procentai" 
+            << setw(6) << "Pazymys" << endl;
+
+    for (const auto &s : studentai) {
+        outFile << left << setw(10) << s.id
+                << setw(8) << s.taskai
+                << setw(10) << fixed << setprecision(2) << s.procentai
+                << setw(6) << s.pazymys << endl;
+    }
+    outFile.close();
+}
+
+
+void klaseStatistika(const vector<Studentas> &studentai) {
+    if (studentai.empty()) return;
+
+    int minTaskai = studentai[0].taskai;
+    int maxTaskai = studentai[0].taskai;
+    double sumaTasku = 0;
+    double sumaProcentu = 0;
+    vector<int> pazymiuSkaicius(11,0); 
+
+    for (const auto &s : studentai) {
+        if (s.taskai < minTaskai) minTaskai = s.taskai;
+        if (s.taskai > maxTaskai) maxTaskai = s.taskai;
+        sumaTasku += s.taskai;
+        sumaProcentu += s.procentai;
+        pazymiuSkaicius[s.pazymys]++;
+    }
+
+
+    cout << "Studentų skaičius: " << studentai.size() << endl;
+    cout << "Min taskai: " << minTaskai << ", Max taskai: " << maxTaskai << endl;
+    cout << "Vidurkis: " << sumaTasku / studentai.size() 
+         << ", Vidutiniai procentai: " << sumaProcentu / studentai.size() << endl;
+    cout << "Pažymių pasiskirstymas:\n";
+    for (int i = 1; i <= 10; i++) {
+        cout << i << ": " << pazymiuSkaicius[i] << endl;
+    }
+}
+
+
+void ieskotiStudento(const vector<Studentas> &studentai) {
+    string id;
+    while (true) {
+        cout << "\nĮveskite studento ID : ";
+        cin >> id;
+        if (id == "0") break;
+        bool rastas = false;
+        for (const auto &s : studentai) {
+            if (s.id == id) {
+                cout << "Rastas studentas: "
+                     << "Taskai=" << s.taskai
+                     << ", Procentai=" << fixed << setprecision(2) << s.procentai
+                     << ", Pazymys=" << s.pazymys << endl;
+                rastas = true;
+                break;
+            }
+        }
+        if (!rastas) {
+            cout << "Studentas su ID " << id << " nerastas.\n";
+        }
+    }
+}
+
+
+void klausimuStatistika(const vector<Studentas> &studentai, const string &teisingiAtsakymai) {
+    int studentuSkaicius = studentai.size();
+    vector<int> teisingi(20,0), neteisingi(20,0), neatsakyti(20,0);
+
+    for (const auto &s : studentai) {
+        for (int i = 0; i < 20; i++) {
+            char ans = s.atsakymai[i];
+            if (ans == 'T' || ans == 'F') {
+                if (ans == teisingiAtsakymai[i])
+                    teisingi[i]++;
+                else
+                    neteisingi[i]++;
+            } else {
+                neatsakyti[i]++;
+            }
+        }
+    }
+
+    
+    for (int i = 0; i < 20; i++) {
+        cout << "Klausimas " << i+1 
+             << ": Teisingi=" << teisingi[i] 
+             << ", Neteisingi=" << neteisingi[i] 
+             << ", Neatsakyti=" << neatsakyti[i] << endl;
+    }
+
+    
+    int minTeisingu = studentuSkaicius;
+    for (int i = 0; i < 20; i++) {
+        if (teisingi[i] < minTeisingu)
+            minTeisingu = teisingi[i];
+    }
+
+    cout << "\nSunkiausias klausimas: ";
+    for (int i = 0; i < 20; i++) {
+        if (teisingi[i] == minTeisingu) {
+            double procentai = (double)teisingi[i]/studentuSkaicius*100;
+            cout << (i+1) << " (" << fixed << setprecision(2) << procentai << "% teisingų) ";
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    string teisingiAtsakymai;
+    vector<Studentas> studentai;
+
+    if (!nuskaitytiDuomenis("testData.txt", teisingiAtsakymai, studentai)) {
+        return 1;
+    }
+
+    
+    for (auto &s : studentai) {
+        skaiciuotiRezultatus(s, teisingiAtsakymai);
+    }
+
+    
+    spausdintiRezultatus(studentai);
+
+    
+    issaugotiRezultatus("results.txt", studentai);
+
+    
+    klaseStatistika(studentai);
+
+    
+    ieskotiStudento(studentai);
+
+    
+    klausimuStatistika(studentai, teisingiAtsakymai);
+
+    return 0;
+}
